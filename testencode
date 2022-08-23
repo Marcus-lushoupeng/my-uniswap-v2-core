@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;
+contract testEncode {
+
+  
+    event log(bytes);
+    event compare(bool);
+    bytes public a;
+    bytes public b;
+    bool public c;
+
+   function myTestEncode() public {
+        a =abi.encodePacked(bytes4(0x12111111),uint16(0x2424),uint16(0x2424),uint32(0x24242424),uint16(0x2424),string("0x1111"));
+        b =abi.encodePacked(bytes4(0x12111111),uint8(0x24),string("0x1111"));//0x1211111124307831313131
+        // b =abi.encode(bytes4(0x12111111),uint8(0x24),string("0x1111"));
+        //0x
+        // 1211111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//bytes4(0x12111111)
+        // 0000000000000000000002400000000000000000000000000000000000000000000000000000000000000600000000000000000000//uint8(0x24)
+        //  0000000000000000000000000000000000000000006307831313131000000000000000000000000000000000000000000000000000//string("0x1111")
+        //compared with the previous b,it would give every para the same space.
+        emit log(a);
+        emit log(b);
+        // c=(int(a)==int(b));
+        emit compare(myCompareByte(a,b));
+    }
+
+    function myCompareByte (bytes memory e,bytes memory d) internal returns (bool) {
+        if(e.length == d.length){
+            for(uint i = 0;i<e.length;++i){
+                if(e[i] != d[i])
+                    return false;
+                    emit log(e);
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+}
